@@ -1,0 +1,52 @@
+<table class="table list table-hover table-expandable table-striped">
+  <thead>
+    <tr>
+      <th>Project Name</th>
+      <th>Version</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @projects.each do |project| %>
+      <tr>
+        <td><%= link_to_project project %></td>
+        <td>
+          <% version = project.versions.last %>
+          <% if version %>
+              <%= render "project_trackers/progress_bar", version: version %>
+          <% end %>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3">
+            <% project.versions.each do |version| %>
+              <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Progress Bar</th>
+                        <th>Status</th>
+                        <th>Last Updated</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                      <td><%= link_to_version version %></td>
+                      <td><%= render "project_trackers/progress_bar", version: version %></td>
+                      <td><%= version.status.titleize %></td>
+                      <td><%= format_time(version.updated_on) %></td>
+                    </tr>
+                </tbody>
+              </table>
+            <% end %>
+        </td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag "bootstrap.min.css", :plugin => "projects_tracker", :media => "screen" %>
+    <%= stylesheet_link_tag "bootstrap-table-expandable.css", :plugin => "projects_tracker", :media => "screen" %>
+    <%= stylesheet_link_tag "custom.css", :plugin => "projects_tracker", :media => "screen" %>
+    <%= javascript_include_tag 'bootstrap.min', :plugin => "projects_tracker" %>
+    <%= javascript_include_tag 'bootstrap-table-expandable', :plugin => "projects_tracker" %>
+<% end %>
